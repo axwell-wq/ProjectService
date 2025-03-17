@@ -1,4 +1,4 @@
-package faang.school.projectservice.jpa;
+package faang.school.projectservice.repository;
 
 import faang.school.projectservice.model.TeamMember;
 import faang.school.projectservice.model.stage.Stage;
