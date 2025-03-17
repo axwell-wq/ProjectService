@@ -9,8 +9,9 @@ import org.mapstruct.ReportingPolicy;
 @Mapper(componentModel = "spring", unmappedSourcePolicy = ReportingPolicy.IGNORE)
 public interface ProjectDtoMapper {
 
-    @Mapper(source = "owner.id", target = "ownerId")
+    @Mapping(source = "owner.id", target = "ownerId")
     ProjectDto toDto(ProjectJpaRepository projectJpaRepository);
 
-    @
+    @Mapping(source = "ownerId", target = "owner.id")
+    ProjectJpaRepository toEntity(ProjectDto projectDto);
 }
