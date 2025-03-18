@@ -9,6 +9,9 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class ProjectServiceImpl implements ProjectService {
@@ -36,5 +39,20 @@ public class ProjectServiceImpl implements ProjectService {
         return mapper.toDto(updateProject);
     }
 
+    public List<ProjectDto> getAllProject(List<Long> id) {
+        List<Project> allById = projectJpaRepository.findAllById(id);
+        return allById.stream()
+                .map(mapper::toDto)
+                .collect(Collectors.toList());
+    }
 
+    public ProjectDto getByIdProject(Long id) {
+        Project project = projectJpaRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("нет такого проекта"));
+       return mapper.toDto(project);
+    }
+
+    //Получить все проекты с фильтрами по названию или статусу.
+    // У проекта также должен быть признак приватности.
+    // Если проект приватный, то по поиску он должен быть видим только своим участникам.
 }
