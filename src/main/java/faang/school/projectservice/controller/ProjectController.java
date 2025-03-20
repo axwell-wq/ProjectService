@@ -24,13 +24,23 @@ public class ProjectController {
         return projectService.updateProject(id, projectDto);
     }
 
-    @GetMapping("/getAllProject/{id}")
-    public List<ProjectDto> getAllProject(@PathVariable List<Long> id) {
-        return projectService.getAllProject(id);
+    @GetMapping("/getAllProject")
+    public List<ProjectDto> getAllProject() {
+        return projectService.getAllProject();
     }
 
     @GetMapping("/getByIdProject/{id}")
     public ProjectDto getByIdProject(@PathVariable Long id) {
         return projectService.getByIdProject(id);
+    }
+
+    @GetMapping("/getAllProjectById/{id}")
+    public List<ProjectDto> getAllProjectById(@PathVariable List<Long> id) {
+        return projectService.getAllProjectById(id);
+    }
+
+    @GetMapping("/getAllProjectsByPrivate/{userId}")
+    public List<ProjectDto> getAllProjectsByPrivate(@PathVariable Long userId) {
+        return projectService.getAllProjectsByPrivate(userId);
     }
 }
