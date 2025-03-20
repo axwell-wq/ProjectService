@@ -34,8 +34,8 @@ public class ProjectController {
         return projectService.getByIdProject(id);
     }
 
-    @GetMapping("/getAllProjectById/{id}")
-    public List<ProjectDto> getAllProjectById(@PathVariable List<Long> id) {
+    @GetMapping("/getAllProjectById")
+    public List<ProjectDto> getAllProjectById(@RequestParam List<Long> id) {
         return projectService.getAllProjectById(id);
     }
 

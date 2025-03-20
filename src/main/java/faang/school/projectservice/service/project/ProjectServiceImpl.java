@@ -14,8 +14,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static faang.school.projectservice.model.ProjectStatus.CANCELLED;
-
 @Service
 @RequiredArgsConstructor
 public class ProjectServiceImpl implements ProjectService {
@@ -73,8 +71,8 @@ public class ProjectServiceImpl implements ProjectService {
         List<Project> projects = projectJpaRepository.findAll();
 
         return projects.stream()
-                .filter(project -> !(project.getVisibility()
-                        .equals(ProjectVisibility.PUBLIC)) || project.getOwnerId().equals(userId))
+                .filter(project -> project.getVisibility()
+                        .equals(ProjectVisibility.PUBLIC) || project.getOwnerId().equals(userId))
                 .map(mapper::toDto)
                 .toList();
     }
