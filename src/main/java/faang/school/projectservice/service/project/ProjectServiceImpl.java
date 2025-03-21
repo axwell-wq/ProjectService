@@ -76,4 +76,19 @@ public class ProjectServiceImpl implements ProjectService {
                 .map(mapper::toDto)
                 .toList();
     }
+
+    public ProjectDto createChildProject(ProjectDto projectDto) {
+        Project parentProject = projectJpaRepository.findById(projectDto.getParentProjectId())
+                .orElseThrow(() -> new EntityNotFoundException("Проект не существует"));
+
+        Project childProject = mapper.toEntity(projectDto);
+        childProject.setParentProject(parentProject);
+        childProject.setStatus(ProjectStatus.CREATED);
+        childProject.setVisibility(parentProject.getVisibility());
+
+        parentProject.getChildren().add(childProject);
+        Project savedChildProject = projectJpaRepository.save(childProject);
+
+        return mapper.toDto(savedChildProject);
+    }
 }

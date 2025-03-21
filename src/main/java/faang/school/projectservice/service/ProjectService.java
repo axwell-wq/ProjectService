@@ -17,4 +17,6 @@ public interface ProjectService {
     ProjectDto getByIdProject(Long id);
 
     List<ProjectDto> getAllProjectsByPrivate(Long userId);
+
+    ProjectDto createChildProject(ProjectDto projectDto);
 }

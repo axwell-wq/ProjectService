@@ -43,4 +43,9 @@ public class ProjectController {
     public List<ProjectDto> getAllProjectsByPrivate(@PathVariable Long userId) {
         return projectService.getAllProjectsByPrivate(userId);
     }
+
+    @PostMapping("create/child")
+    ProjectDto createChildProject(@RequestBody ProjectDto projectDto) {
+        return projectService.createChildProject(projectDto);
+    }
 }
