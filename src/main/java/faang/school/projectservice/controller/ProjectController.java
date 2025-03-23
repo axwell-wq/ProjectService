@@ -1,6 +1,8 @@
 package faang.school.projectservice.controller;
 
+import faang.school.projectservice.dto.client.FilterProjectDto;
 import faang.school.projectservice.dto.client.ProjectDto;
+import faang.school.projectservice.dto.client.ProjectUpdateDto;
 import faang.school.projectservice.service.ProjectService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -45,7 +47,17 @@ public class ProjectController {
     }
 
     @PostMapping("create/child")
-    ProjectDto createChildProject(@RequestBody ProjectDto projectDto) {
+    public ProjectDto createChildProject(@RequestBody ProjectDto projectDto) {
         return projectService.createChildProject(projectDto);
+    }
+
+    @PutMapping("update/child")
+    public ProjectDto updateChildProject(@RequestBody ProjectUpdateDto projectDto) {
+        return projectService.updateChildProject(projectDto);
+    }
+
+    @GetMapping("/children")
+    public List<ProjectDto> getChildrenProjects(FilterProjectDto filterProjectDto) {
+        return projectService.getChildrenProjects(filterProjectDto);
     }
 }

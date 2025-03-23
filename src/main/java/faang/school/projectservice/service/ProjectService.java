@@ -1,6 +1,8 @@
 package faang.school.projectservice.service;
 
+import faang.school.projectservice.dto.client.FilterProjectDto;
 import faang.school.projectservice.dto.client.ProjectDto;
+import faang.school.projectservice.dto.client.ProjectUpdateDto;
 
 import java.util.List;
 
@@ -19,4 +21,8 @@ public interface ProjectService {
     List<ProjectDto> getAllProjectsByPrivate(Long userId);
 
     ProjectDto createChildProject(ProjectDto projectDto);
+
+    ProjectDto updateChildProject(ProjectUpdateDto projectDto);
+
+    List<ProjectDto> getChildrenProjects(FilterProjectDto filterProjectDto);
 }

@@ -4,26 +4,17 @@ import faang.school.projectservice.model.ProjectStatus;
 import faang.school.projectservice.model.ProjectVisibility;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class ProjectDto {
-
-    private Long id;
+public class ProjectUpdateDto {
 
     @NotNull
-    private String name;
-    private String description;
-    private Long ownerId;
+    private Long id;
+
     private ProjectStatus status;
     private ProjectVisibility visibility;
-    private Long parentProjectId;
-    private List<Long> childrenId;
 }
