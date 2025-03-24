@@ -1,6 +1,8 @@
 package faang.school.projectservice.service.project;
 
+import faang.school.projectservice.dto.client.FilterProjectDto;
 import faang.school.projectservice.dto.client.ProjectDto;
+import faang.school.projectservice.dto.client.ProjectUpdateDto;
 import faang.school.projectservice.mapper.ProjectDtoMapper;
 import faang.school.projectservice.model.Project;
 import faang.school.projectservice.model.ProjectStatus;
@@ -63,7 +65,7 @@ public class ProjectServiceImpl implements ProjectService {
     public ProjectDto getByIdProject(Long id) {
         Project project = projectJpaRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("нет такого проекта"));
-       return mapper.toDto(project);
+        return mapper.toDto(project);
     }
 
     @Override
@@ -75,5 +77,70 @@ public class ProjectServiceImpl implements ProjectService {
                         .equals(ProjectVisibility.PUBLIC) || project.getOwnerId().equals(userId))
                 .map(mapper::toDto)
                 .toList();
+    }
+
+    public ProjectDto createChildProject(ProjectDto projectDto) {
+        Project parentProject = projectJpaRepository.findById(projectDto.getParentProjectId())
+                .orElseThrow(() -> new EntityNotFoundException("Проект не существует"));
+
+        Project childProject = mapper.toEntity(projectDto);
+        childProject.setParentProject(parentProject);
+        childProject.setStatus(ProjectStatus.CREATED);
+        childProject.setVisibility(parentProject.getVisibility());
+
+        parentProject.getChildren().add(childProject);
+        Project savedChildProject = projectJpaRepository.save(childProject);
+
+        return mapper.toDto(savedChildProject);
+    }
+
+    public ProjectDto updateChildProject(ProjectUpdateDto projectDto) {
+        Project project = updateFieldProject(projectDto);
+
+        List<Project> childProjects = projectJpaRepository.getProjectsByParentProjectId(project.getId());
+
+        for (Project childProject : childProjects) {
+            if (!childProject.getStatus().equals(project.getStatus())) {
+                childProject.setStatus(project.getStatus());
+            }
+        }
+
+        projectJpaRepository.saveAll(childProjects);
+
+        if (project.getVisibility().equals(ProjectVisibility.PRIVATE)) {
+            for (Project childProject : projectJpaRepository.getProjectsByParentProjectId(project.getId())) {
+                childProject.setVisibility(project.getVisibility());
+                projectJpaRepository.save(childProject);
+            }
+        }
+
+        project.setChildren(projectJpaRepository.getProjectsByParentProjectId(project.getId()));
+
+        return mapper.toDto(projectJpaRepository.save(project));
+    }
+
+    public List<ProjectDto> getChildrenProjects(FilterProjectDto filterProjectDto) {
+        List<Project> projects = projectJpaRepository.getChildrenProjects(
+                filterProjectDto.getParentProjectId(),
+                filterProjectDto.getName(),
+                filterProjectDto.getStatus()
+        );
+
+        return projects.stream()
+                .map(mapper::toDto)
+                .toList();
+    }
+
+    private Project updateFieldProject(ProjectUpdateDto projectDto) {
+        Project project = projectJpaRepository.findById(projectDto.getId()).orElseThrow(
+                () -> new EntityNotFoundException("Проект не существует"));
+
+        if (projectDto.getStatus() != null) {
+            project.setStatus(projectDto.getStatus());
+        } else if (projectDto.getVisibility() != null) {
+            project.setVisibility(projectDto.getVisibility());
+        }
+
+        return project;
     }
 }
