@@ -81,4 +81,9 @@ public class StageServiceImpl implements StageService {
         List<Stage> stageList = project.getStages();
         return projectDtoMapper.toDto(stageList);
     }
+
+    public StageDto getById(Long id) {
+        return stageMapper.toDto(stageJpaRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("Нет такого этапа")));
+    }
 }
