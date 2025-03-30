@@ -62,7 +62,7 @@ public class StageServiceImpl implements StageService {
         }
     }
 
-    public void TaskTransfer(Long stageId, Long stageTransferId) {
+    public void taskTransfer(Long stageId, Long stageTransferId) {
         Stage stage = stageJpaRepository.findById(stageId).orElseThrow(
                 () -> new EntityNotFoundException("Нет такого проекта"));
 
@@ -72,14 +72,21 @@ public class StageServiceImpl implements StageService {
         List<Task> taskList = stage.getTasks();
         List<Task> taskListTransfer = stageTransfer.getTasks();
         taskListTransfer.addAll(taskList);
+
+        stageTransfer.setTasks(taskListTransfer);
+
+        stageJpaRepository.save(stageTransfer);
     }
 
-    public List<StageDto> getAllStage(ProjectDto projectDto) {
-        Project project = projectJpaRepository.findById(projectDto.getId()).orElseThrow(
+    public List<StageDto> getAllStage(Long projectId) {
+        Project project = projectJpaRepository.findById(projectId).orElseThrow(
                 () -> new EntityNotFoundException("Проект не найден"));
 
         List<Stage> stageList = project.getStages();
-        return projectDtoMapper.toDto(stageList);
+
+        return stageList.stream()
+                .map(stageMapper::toDto)
+                .toList();
     }
 
     public StageDto getById(Long id) {
