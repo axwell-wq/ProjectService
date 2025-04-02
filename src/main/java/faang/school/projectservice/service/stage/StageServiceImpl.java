@@ -29,7 +29,6 @@ public class StageServiceImpl implements StageService {
     private final ProjectJpaRepository projectJpaRepository;
     private final StageDtoMapper stageMapper;
     private final StageRolesMapper stageRolesMapper;
-    private final ProjectDtoMapper projectDtoMapper;
 
     public StageDto createStage(StageDto stageDto) {
         Project project = projectJpaRepository.findById(stageDto.getProjectId()).orElseThrow(
@@ -92,5 +91,9 @@ public class StageServiceImpl implements StageService {
     public StageDto getById(Long id) {
         return stageMapper.toDto(stageJpaRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("Нет такого этапа")));
+    }
+
+    public StageDto updateStage(StageDto stageDto) {
+
     }
 }
