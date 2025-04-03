@@ -92,8 +92,4 @@ public class StageServiceImpl implements StageService {
         return stageMapper.toDto(stageJpaRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("Нет такого этапа")));
     }
-
-    public StageDto updateStage(StageDto stageDto) {
-
-    }
 }
