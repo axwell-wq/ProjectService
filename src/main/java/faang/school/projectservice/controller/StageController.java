@@ -20,6 +20,7 @@ public class StageController {
     @ResponseStatus(HttpStatus.CREATED)
     public StageDto createStage(@RequestBody StageDto stageDto) {
         return stageService.createStage(stageDto);
+
     }
 
     @GetMapping("/getstagesyroles")
