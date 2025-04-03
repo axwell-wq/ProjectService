@@ -4,6 +4,7 @@ import faang.school.projectservice.dto.client.StageDto;
 import faang.school.projectservice.dto.client.StageFilterDto;
 import faang.school.projectservice.service.StageService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,6 +17,7 @@ public class StageController {
     private final StageService stageService;
 
     @PostMapping("/create")
+    @ResponseStatus(HttpStatus.CREATED)
     public StageDto createStage(@RequestBody StageDto stageDto) {
         return stageService.createStage(stageDto);
     }

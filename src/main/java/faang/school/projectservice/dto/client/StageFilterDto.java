@@ -1,5 +1,6 @@
 package faang.school.projectservice.dto.client;
 
+import faang.school.projectservice.model.TeamRole;
 import lombok.Data;
 
 import java.util.List;
@@ -7,5 +8,5 @@ import java.util.List;
 @Data
 public class StageFilterDto {
     private Long projectId;
-    private List<StageRolesDto> roles;
+    private List<TeamRole> roles;
 }

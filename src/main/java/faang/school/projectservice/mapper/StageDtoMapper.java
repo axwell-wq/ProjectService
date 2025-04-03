@@ -9,7 +9,9 @@ import org.mapstruct.ReportingPolicy;
 @Mapper(componentModel = "spring", unmappedSourcePolicy = ReportingPolicy.IGNORE)
 public interface StageDtoMapper {
 
+    @Mapping(source = "project.id", target = "projectId")
     StageDto toDto(Stage stage);
 
+    @Mapping(source = "projectId", target = "project.id")
     Stage toEntity(StageDto stageDto);
 }

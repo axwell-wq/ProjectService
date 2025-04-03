@@ -1,10 +1,8 @@
 package faang.school.projectservice.service.stage;
 
-import faang.school.projectservice.dto.client.ProjectDto;
 import faang.school.projectservice.dto.client.StageDto;
 import faang.school.projectservice.dto.client.StageFilterDto;
 import faang.school.projectservice.dto.client.StageRolesDto;
-import faang.school.projectservice.mapper.ProjectDtoMapper;
 import faang.school.projectservice.mapper.StageDtoMapper;
 import faang.school.projectservice.mapper.StageRolesMapper;
 import faang.school.projectservice.model.Project;
@@ -18,7 +16,6 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -38,15 +35,19 @@ public class StageServiceImpl implements StageService {
 
         stage.setProject(project);
 
-        return stageMapper.toDto(stage);
+        StageDto outStageDto = stageMapper.toDto(stage);
+
+        outStageDto.setStageRolesDtoList(stageDto.getStageRolesDtoList());
+
+        for (StageRolesDto rolesDto : stageDto.getStageRolesDtoList()) {
+            stageJpaRepository.saveStageRole(rolesDto.getTeamRole().toString(), rolesDto.getCount(), stage.getStageId());
+        }
+
+        return outStageDto;
     }
 
     public List<StageDto> getStageByRoles(StageFilterDto filterDto) {
-        List<StageRoles> stageRoles = filterDto.getRoles().stream()
-                .map(stageRolesMapper::toEntity)
-                .toList();
-
-        List<Stage> stageList = stageJpaRepository.findByProjectIdAndStageRoles(filterDto.getProjectId(), stageRoles);
+        List<Stage> stageList = stageJpaRepository.findStagesByProjectAndRoles(filterDto.getProjectId(), filterDto.getRoles());
 
         return stageList.stream()
                 .map(stageMapper::toDto)
