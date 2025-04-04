@@ -1,47 +1,25 @@
-name: CI Pipeline axwell
+name: Axwell CI Pipeline
 
 on:
   pull_request:
-    branches:
-      - axwell
+    branches: ['axwell**']
+  push:
+    branches: ['axwell**']
 
 jobs:
-  test:
+  verify:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        java-version: [17]
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Set up JDK ${{ matrix.java-version }}
+      - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: ${{ matrix.java-version }}
-          cache: 'gradle'
+          java-version: 17
 
-      - name: Grant execute permission for gradlew
+      - name: Make gradlew executable
         run: chmod +x gradlew
 
-      - name: Cache Gradle dependencies
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
-
-      - name: Build with tests
-        run: ./gradlew build
-
-      - name: Upload JaCoCo report
-        if: always()
-        uses: actions/upload-artifact@v3
-        with:
-          name: jacoco-report
-          path: build/reports/jacoco/test/
+      - name: Run build and tests
+        run: ./gradlew clean build
