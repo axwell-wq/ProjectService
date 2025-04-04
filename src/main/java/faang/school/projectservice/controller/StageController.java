@@ -13,7 +13,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/stage")
 public class StageController {
-
     private final StageService stageService;
 
     @PostMapping("/create")
