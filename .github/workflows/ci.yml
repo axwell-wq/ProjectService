@@ -3,7 +3,7 @@ name: CI Pipeline Cyclop
 on:
   pull_request:
     branches:
-      - cyclop-master-stream7
+      - axwell
 jobs:
   test:
     runs-on: ubuntu-latest
