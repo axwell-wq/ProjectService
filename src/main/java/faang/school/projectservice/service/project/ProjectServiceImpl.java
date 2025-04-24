@@ -1,6 +1,7 @@
 package faang.school.projectservice.service.project;
 
 import faang.school.projectservice.dto.client.ProjectDto;
+import faang.school.projectservice.exception.DataValidationException;
 import faang.school.projectservice.mapper.ProjectDtoMapper;
 import faang.school.projectservice.model.Project;
 import faang.school.projectservice.model.ProjectStatus;
@@ -24,7 +25,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public ProjectDto createProject(ProjectDto projectDto) {
         if (projectJpaRepository.existsByOwnerIdAndName(projectDto.getOwnerId(), projectDto.getName())) {
-            throw new IllegalArgumentException("такое имя уже существует");
+            throw new DataValidationException("такое имя уже существует");
         }
         projectDto.setStatus(ProjectStatus.CREATED);
         projectJpaRepository.save(mapper.toEntity(projectDto));
